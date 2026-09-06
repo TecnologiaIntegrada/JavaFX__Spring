@@ -1,6 +1,6 @@
-# Gestão operacional (Projeto J)
+# Gestão de compras (Projeto J)
 
-Sistema corporativo de gestão operacional com foco em **identidade/acesso** e no módulo de **compras**, composto por API REST (Backend) e aplicação desktop (FrontEnd).
+Sistema de gestão de compras com suporte a **identidade/acesso** e no módulo de **compras**, composto por API REST (Backend) e aplicação desktop (FrontEnd).
 
 ## Visão geral
 
