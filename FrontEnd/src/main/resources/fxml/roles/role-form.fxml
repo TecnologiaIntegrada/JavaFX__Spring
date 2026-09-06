@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.projetoj.frontend.identity.role.ui.controller.RoleFormController"
+      spacing="10"
+      styleClass="panel"
+      prefWidth="820"
+      prefHeight="620">
+    <padding>
+        <Insets top="16" right="16" bottom="16" left="16"/>
+    </padding>
+
+    <Label text="Perfil" styleClass="panel-title"/>
+
+    <HBox spacing="12">
+        <VBox spacing="6" HBox.hgrow="ALWAYS">
+            <Label text="Nome"/>
+            <TextField fx:id="nameField"/>
+        </VBox>
+        <VBox spacing="6" alignment="BOTTOM_LEFT">
+            <CheckBox fx:id="activeCheck" text="Ativo"/>
+        </VBox>
+    </HBox>
+
+    <Label text="Descricao"/>
+    <TextArea fx:id="descriptionField" prefRowCount="2"/>
+
+    <Label text="Permissoes do perfil (registros filhos)" styleClass="panel-title"/>
+
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <TextField fx:id="permissionFilterField" promptText="Filtrar por codigo, modulo ou acao..." HBox.hgrow="ALWAYS"/>
+        <Button text="Marcar visiveis" onAction="#onSelectAllVisible" styleClass="secondary-button"/>
+        <Button text="Limpar visiveis" onAction="#onClearVisible" styleClass="secondary-button"/>
+    </HBox>
+
+    <TableView fx:id="permissionTable" VBox.vgrow="ALWAYS" prefHeight="320">
+        <columns>
+            <TableColumn fx:id="selectedColumn" text="Vincular" prefWidth="80"/>
+            <TableColumn fx:id="codeColumn" text="Codigo" prefWidth="160"/>
+            <TableColumn fx:id="moduleColumn" text="Modulo" prefWidth="140"/>
+            <TableColumn fx:id="actionColumn" text="Acao" prefWidth="110"/>
+            <TableColumn fx:id="descriptionColumn" text="Descricao" prefWidth="220"/>
+        </columns>
+    </TableView>
+
+    <Label fx:id="selectedCountLabel" styleClass="message"/>
+    <Label fx:id="messageLabel" styleClass="message" wrapText="true"/>
+
+    <HBox spacing="12">
+        <Button fx:id="saveButton" text="Salvar" onAction="#onSave" styleClass="primary-button"/>
+        <Button text="Cancelar" onAction="#onCancel" styleClass="secondary-button"/>
+    </HBox>
+</VBox>

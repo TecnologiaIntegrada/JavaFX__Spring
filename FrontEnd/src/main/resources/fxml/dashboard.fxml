@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.projetoj.frontend.shared.ui.DashboardController"
+      spacing="16"
+      styleClass="panel">
+    <padding>
+        <Insets top="8" right="8" bottom="8" left="8"/>
+    </padding>
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <Label text="Dashboard de Compras" styleClass="panel-title"/>
+        <HBox HBox.hgrow="ALWAYS"/>
+        <ProgressIndicator fx:id="loadingIndicator" prefWidth="22" prefHeight="22"/>
+    </HBox>
+    <Label fx:id="welcomeLabel" wrapText="true" styleClass="message"/>
+
+    <GridPane hgap="16" vgap="16">
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="8" styleClass="kpi-card">
+            <Label text="Fornecedores" styleClass="kpi-label"/>
+            <Label fx:id="suppliersKpi" text="-" styleClass="kpi-value"/>
+        </VBox>
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="8" styleClass="kpi-card">
+            <Label text="Produtos" styleClass="kpi-label"/>
+            <Label fx:id="productsKpi" text="-" styleClass="kpi-value"/>
+        </VBox>
+        <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" spacing="8" styleClass="kpi-card">
+            <Label text="RC abertas" styleClass="kpi-label"/>
+            <Label fx:id="openRequisitionsKpi" text="-" styleClass="kpi-value"/>
+        </VBox>
+        <VBox GridPane.columnIndex="3" GridPane.rowIndex="0" spacing="8" styleClass="kpi-card">
+            <Label text="RFQ abertas" styleClass="kpi-label"/>
+            <Label fx:id="openRfqsKpi" text="-" styleClass="kpi-value"/>
+        </VBox>
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" spacing="8" styleClass="kpi-card">
+            <Label text="PO abertos" styleClass="kpi-label"/>
+            <Label fx:id="openOrdersKpi" text="-" styleClass="kpi-value"/>
+        </VBox>
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="8" styleClass="kpi-card">
+            <Label text="Aprovacoes pendentes" styleClass="kpi-label"/>
+            <Label fx:id="pendingApprovalsKpi" text="-" styleClass="kpi-value"/>
+        </VBox>
+    </GridPane>
+
+    <HBox spacing="16" VBox.vgrow="ALWAYS">
+        <VBox spacing="8" HBox.hgrow="ALWAYS" prefHeight="280">
+            <Label text="Pedidos por status" styleClass="panel-subtitle"/>
+            <PieChart fx:id="ordersStatusChart" prefHeight="260" legendVisible="true"/>
+        </VBox>
+        <VBox spacing="8" HBox.hgrow="ALWAYS" prefHeight="280">
+            <Label text="Requisicoes por status" styleClass="panel-subtitle"/>
+            <PieChart fx:id="requisitionsStatusChart" prefHeight="260" legendVisible="true"/>
+        </VBox>
+    </HBox>
+
+    <VBox spacing="8" VBox.vgrow="ALWAYS" prefHeight="300">
+        <Label text="Projecao mensal de pedidos (quantidade e valor)" styleClass="panel-subtitle"/>
+        <BarChart fx:id="monthlyOrdersChart" prefHeight="280" legendVisible="true">
+            <xAxis>
+                <CategoryAxis fx:id="monthAxis" label="Mes"/>
+            </xAxis>
+            <yAxis>
+                <NumberAxis fx:id="countAxis" label="Quantidade"/>
+            </yAxis>
+        </BarChart>
+    </VBox>
+
+    <Label fx:id="messageLabel" styleClass="message"/>
+</VBox>

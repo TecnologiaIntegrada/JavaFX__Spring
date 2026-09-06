@@ -1,0 +1,127 @@
+.root-pane {
+    -fx-background-color: #f4f6f9;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 14px;
+}
+
+.login-root {
+    -fx-background-image: url("/images/login-background.jpg");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+    -fx-background-size: cover;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 14px;
+}
+
+.login-form-card {
+    -fx-background-color: rgba(255, 255, 255, 0.92);
+    -fx-background-radius: 10;
+    -fx-border-color: #dbe4f0;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.18), 18, 0.2, 0, 6);
+}
+
+.login-title {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.login-subtitle {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 13px;
+    -fx-padding: 0 0 8 0;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.login-field-label {
+    -fx-text-fill: #475569;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.login-message {
+    -fx-text-fill: #475569;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.header {
+    -fx-background-color: #1e293b;
+}
+
+.app-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.app-subtitle {
+    -fx-text-fill: #cbd5e1;
+    -fx-font-size: 13px;
+}
+
+.content-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-max-width: 720;
+}
+
+.field-label {
+    -fx-text-fill: #64748b;
+    -fx-font-weight: bold;
+    -fx-min-width: 100;
+}
+
+.field-value {
+    -fx-text-fill: #0f172a;
+}
+
+.status-value {
+    -fx-text-fill: #059669;
+    -fx-font-weight: bold;
+}
+
+.message {
+    -fx-text-fill: #475569;
+}
+
+.primary-button {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 16 8 16;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.primary-button:hover {
+    -fx-background-color: #1d4ed8;
+}
+
+.primary-button:disabled {
+    -fx-background-color: #94a3b8;
+    -fx-cursor: default;
+}
+
+.secondary-button {
+    -fx-background-color: #0f172a;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 16 8 16;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #1e293b;
+}
+
+.secondary-button:disabled {
+    -fx-background-color: #94a3b8;
+    -fx-cursor: default;
+}

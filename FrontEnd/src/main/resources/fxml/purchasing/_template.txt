@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="CONTROLLER"
+      spacing="12" styleClass="panel">
+    <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <Label text="TITLE" styleClass="panel-title"/>
+        <HBox HBox.hgrow="ALWAYS"/>
+        <ProgressIndicator fx:id="loadingIndicator" prefWidth="22" prefHeight="22"/>
+        <Button fx:id="createButton" text="Novo" onAction="#onCreate" styleClass="primary-button"/>
+        <Button fx:id="editButton" text="Editar" onAction="#onEdit" styleClass="secondary-button"/>
+        <Button fx:id="deleteButton" text="Excluir" onAction="#onDelete" styleClass="secondary-button"/>
+        <Button text="Atualizar" onAction="#onRefresh" styleClass="secondary-button"/>
+    </HBox>
+    <TableView fx:id="table" VBox.vgrow="ALWAYS"/>
+    <Label fx:id="messageLabel" styleClass="message"/>
+</VBox>

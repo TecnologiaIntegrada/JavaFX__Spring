@@ -1,0 +1,28 @@
+# Build
+**/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.classpath
+.project
+.settings/
+
+# OS / logs
+*.log
+*.class
+*.jar
+*.war
+*.ear
+.DS_Store
+Thumbs.db
+
+# Secrets / local overrides
+.env
+.env.*
+**/application-local.yml
+**/application-local.properties

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.projetoj.frontend.shared.ui.ShellController"
+            styleClass="shell-root">
+
+    <left>
+        <ScrollPane fitToWidth="true" styleClass="sidebar" prefWidth="250">
+            <VBox spacing="4" styleClass="sidebar">
+                <padding>
+                    <Insets top="16" right="8" bottom="16" left="8"/>
+                </padding>
+                <Label text="Gestao operacional" styleClass="sidebar-brand"/>
+                <Label fx:id="sessionLabel" styleClass="sidebar-section" wrapText="true"/>
+
+                <TitledPane fx:id="principalGroup" text="Principal" expanded="false" collapsible="true" styleClass="nav-group">
+                    <VBox spacing="4">
+                        <Button fx:id="dashboardButton" text="Dashboard Compras" onAction="#openDashboard" styleClass="nav-button" maxWidth="Infinity"/>
+                    </VBox>
+                </TitledPane>
+
+                <TitledPane fx:id="adminGroup" text="Cadastros (Sistema)" expanded="false" collapsible="true" styleClass="nav-group">
+                    <VBox spacing="4">
+                        <Button fx:id="usersButton" text="Usuários" onAction="#openUsers" styleClass="nav-button" maxWidth="Infinity"/>
+                        <Button fx:id="rolesButton" text="Perfis" onAction="#openRoles" styleClass="nav-button" maxWidth="Infinity"/>
+                        <Button fx:id="permissionsButton" text="Permissões" onAction="#openPermissions" styleClass="nav-button" maxWidth="Infinity"/>
+                        <Button fx:id="modulesButton" text="Módulos" onAction="#openModules" styleClass="nav-button" maxWidth="Infinity"/>
+                    </VBox>
+                </TitledPane>
+
+                <TitledPane fx:id="purchasingMasterGroup" text="Compras - Cadastros" expanded="false" collapsible="true" styleClass="nav-group">
+                    <VBox spacing="4">
+                        <Button fx:id="productsButton" text="Produtos" onAction="#openProducts" styleClass="nav-button" maxWidth="Infinity"/>
+                        <Button fx:id="suppliersButton" text="Fornecedores" onAction="#openSuppliers" styleClass="nav-button" maxWidth="Infinity"/>
+                    </VBox>
+                </TitledPane>
+
+                <TitledPane fx:id="purchasingOpsGroup" text="Compras - Operacional" expanded="false" collapsible="true" styleClass="nav-group">
+                    <VBox spacing="4">
+                        <Button fx:id="requisitionsButton" text="Req. compras" onAction="#openRequisitions" styleClass="nav-button" maxWidth="Infinity"/>
+                        <Button fx:id="approvalsButton" text="Aprovar RC" onAction="#openApprovals" styleClass="nav-button" maxWidth="Infinity"/>
+                        <Button fx:id="rfqsButton" text="Solicitar cotação (RFQ)" onAction="#openRfqs" styleClass="nav-button" maxWidth="Infinity"/>
+                        <Button fx:id="quotesButton" text="Propostas" onAction="#openQuotes" styleClass="nav-button" maxWidth="Infinity"/>
+                        <Button fx:id="awardsButton" text="Mapa Comparativo" onAction="#openAwards" styleClass="nav-button" maxWidth="Infinity"/>
+                        <Button fx:id="purchaseOrdersButton" text="Pedidos de Compra" onAction="#openPurchaseOrders" styleClass="nav-button" maxWidth="Infinity"/>
+                        <Button fx:id="goodsReceiptsButton" text="Recebimentos" onAction="#openGoodsReceipts" styleClass="nav-button" maxWidth="Infinity"/>
+                    </VBox>
+                </TitledPane>
+
+                <TitledPane fx:id="systemGroup" text="Sistema" expanded="false" collapsible="true" styleClass="nav-group">
+                    <VBox spacing="4">
+                        <Button fx:id="apiLogsButton" text="Log de API" onAction="#openApiLogs" styleClass="nav-button" maxWidth="Infinity"/>
+                        <Button fx:id="connectivityButton" text="Conectividade" onAction="#openConnectivity" styleClass="nav-button" maxWidth="Infinity"/>
+                    </VBox>
+                </TitledPane>
+
+                <VBox VBox.vgrow="ALWAYS"/>
+                <Button fx:id="logoutButton" text="Sair" onAction="#onLogout" styleClass="nav-button-secondary" maxWidth="Infinity"/>
+            </VBox>
+        </ScrollPane>
+    </left>
+
+    <top>
+        <HBox spacing="12" alignment="CENTER_LEFT" styleClass="shell-header">
+            <padding>
+                <Insets top="16" right="20" bottom="16" left="20"/>
+            </padding>
+            <Label fx:id="headerTitleLabel" text="Dashboard" styleClass="shell-title"/>
+        </HBox>
+    </top>
+
+    <center>
+        <StackPane fx:id="contentArea" styleClass="shell-content">
+            <padding>
+                <Insets top="16" right="20" bottom="16" left="20"/>
+            </padding>
+        </StackPane>
+    </center>
+
+    <bottom>
+        <HBox styleClass="status-bar">
+            <padding>
+                <Insets top="8" right="16" bottom="8" left="16"/>
+            </padding>
+            <Label fx:id="statusBarLabel" text="Pronto" styleClass="status-bar-text"/>
+        </HBox>
+    </bottom>
+</BorderPane>

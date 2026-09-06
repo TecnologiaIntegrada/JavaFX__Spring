@@ -1,0 +1,135 @@
+.shell-root {
+    -fx-background-color: #eef2f7;
+}
+
+.sidebar {
+    -fx-background-color: #1e293b;
+}
+
+.sidebar-brand {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 12 0;
+}
+
+.sidebar-section {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #e2e8f0;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10 12 10 12;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.nav-button:hover {
+    -fx-background-color: #334155;
+}
+
+.nav-button-active {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+}
+
+.nav-button-secondary {
+    -fx-background-color: #334155;
+    -fx-text-fill: #e2e8f0;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.shell-header {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.shell-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.shell-content {
+    -fx-background-color: #eef2f7;
+}
+
+.status-bar {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1 0 0 0;
+}
+
+.status-bar-text {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 12px;
+}
+
+.panel {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8;
+    -fx-padding: 12;
+}
+
+.nav-group {
+    -fx-background-color: transparent;
+}
+
+.nav-group > .title {
+    -fx-background-color: #334155;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+.nav-group > .title > .text {
+    -fx-fill: #ffffff;
+}
+
+.nav-group > .title > .arrow-button > .arrow {
+    -fx-background-color: #ffffff;
+}
+
+.nav-group > .content {
+    -fx-background-color: transparent;
+    -fx-padding: 4 0 8 0;
+}
+
+.panel-subtitle {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #334155;
+}
+
+.kpi-card {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 12;
+    -fx-min-width: 140;
+}
+
+.kpi-label {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 12px;
+}
+
+.kpi-value {
+    -fx-text-fill: #0f172a;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.panel-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
