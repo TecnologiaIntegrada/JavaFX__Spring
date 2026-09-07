@@ -2,6 +2,8 @@ package com.projetoj.purchasing.catalog.adapter.input.rest;
 
 import com.projetoj.purchasing.catalog.adapter.output.persistence.ProductJpaEntity;
 import com.projetoj.purchasing.catalog.adapter.output.persistence.SpringDataProductJpaRepository;
+import com.projetoj.purchasing.catalog.adapter.output.persistence.SpringDataUnitOfMeasureJpaRepository;
+import com.projetoj.purchasing.catalog.adapter.output.persistence.UnitOfMeasureJpaEntity;
 import com.projetoj.purchasing.shared.PurchasingAuditService;
 import com.projetoj.purchasing.shared.PurchasingAuditSupport;
 import com.projetoj.purchasing.supplier.adapter.output.persistence.SpringDataSupplierJpaRepository;
@@ -41,15 +43,18 @@ public class ProductRestController {
 
     private final SpringDataProductJpaRepository productRepository;
     private final SpringDataSupplierJpaRepository supplierRepository;
+    private final SpringDataUnitOfMeasureJpaRepository unitRepository;
     private final PurchasingAuditService auditService;
 
     public ProductRestController(
             SpringDataProductJpaRepository productRepository,
             SpringDataSupplierJpaRepository supplierRepository,
+            SpringDataUnitOfMeasureJpaRepository unitRepository,
             PurchasingAuditService auditService
     ) {
         this.productRepository = productRepository;
         this.supplierRepository = supplierRepository;
+        this.unitRepository = unitRepository;
         this.auditService = auditService;
     }
 
@@ -151,12 +156,26 @@ public class ProductRestController {
     private void apply(ProductJpaEntity entity, ProductRequest request, Instant now) {
         entity.setCode(request.code().trim());
         entity.setDescription(request.description().trim());
-        entity.setUnitOfMeasure(request.unitOfMeasure().trim());
+        entity.setUnitOfMeasure(resolveUnitCode(request.unitOfMeasure()));
         entity.setSupplierId(resolveSupplierId(request.supplierId()));
         entity.setManufacturer(null);
         entity.setManufacturerPartNumber(request.manufacturerPartNumber());
         entity.setActive(request.active() == null || request.active());
         entity.setUpdatedAt(now);
+    }
+
+    private String resolveUnitCode(String unitOfMeasure) {
+        String code = unitOfMeasure == null ? "" : unitOfMeasure.trim();
+        UnitOfMeasureJpaEntity unit = unitRepository.findByCodeIgnoreCase(code)
+                .orElseThrow(() -> new BusinessException(
+                        "UNIT_NOT_FOUND",
+                        "Unidade de medida nao encontrada: " + code,
+                        HttpStatus.BAD_REQUEST.value()
+                ));
+        if (!unit.isActive()) {
+            throw new BusinessException("UNIT_INACTIVE", "Unidade de medida inativa: " + unit.getCode(), HttpStatus.BAD_REQUEST.value());
+        }
+        return unit.getCode();
     }
 
     private UUID resolveSupplierId(UUID supplierId) {

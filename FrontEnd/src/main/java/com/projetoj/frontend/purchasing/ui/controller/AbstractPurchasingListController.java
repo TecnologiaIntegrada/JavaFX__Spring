@@ -12,6 +12,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -314,11 +315,7 @@ public abstract class AbstractPurchasingListController {
                 Map<String, List<LookupOption>> comboOptions = new LinkedHashMap<>();
                 for (FormFieldSpec spec : formFieldSpecs()) {
                     if (spec.type() == FormFieldType.COMBO) {
-                        comboOptions.put(spec.key(), loadLookupOptions(
-                                resolveComboPath(spec),
-                                spec.comboIdField(),
-                                spec.comboLabelField()
-                        ));
+                        comboOptions.put(spec.key(), resolveComboOptions(spec));
                     }
                 }
                 return comboOptions;
@@ -342,11 +339,7 @@ public abstract class AbstractPurchasingListController {
             Map<String, List<LookupOption>> comboOptions = new LinkedHashMap<>();
             for (FormFieldSpec spec : formFieldSpecs()) {
                 if (spec.type() == FormFieldType.COMBO) {
-                    comboOptions.put(spec.key(), loadLookupOptions(
-                            resolveComboPath(spec),
-                            spec.comboIdField(),
-                            spec.comboLabelField()
-                    ));
+                    comboOptions.put(spec.key(), resolveComboOptions(spec));
                 }
             }
             return showFormDialog(title, current, comboOptions);
@@ -422,10 +415,18 @@ public abstract class AbstractPurchasingListController {
             row++;
         }
         ColumnConstraints(grid);
+        Node extra = extraFormContent(current);
+        VBox root = new VBox(12, grid);
+        if (extra != null) {
+            root.getChildren().add(extra);
+        }
         javafx.scene.control.Dialog<Map<String, String>> dialog = new javafx.scene.control.Dialog<>();
         dialog.setTitle(title);
-        dialog.getDialogPane().setContent(grid);
-        dialog.getDialogPane().setPrefWidth(560);
+        dialog.getDialogPane().setContent(root);
+        dialog.getDialogPane().setPrefWidth(extra == null ? 560 : 680);
+        if (extra != null) {
+            dialog.getDialogPane().setPrefHeight(620);
+        }
         dialog.getDialogPane().getButtonTypes().addAll(
                 javafx.scene.control.ButtonType.OK,
                 javafx.scene.control.ButtonType.CANCEL
@@ -446,9 +447,24 @@ public abstract class AbstractPurchasingListController {
                 }
                 result.put(k, selected == null ? "" : selected.id());
             });
+            collectExtraForm(result);
             return result;
         });
         return dialog.showAndWait().orElse(null);
+    }
+
+    protected Node extraFormContent(Map<String, Object> current) {
+        return null;
+    }
+
+    protected void collectExtraForm(Map<String, String> values) {
+    }
+
+    protected List<LookupOption> resolveComboOptions(FormFieldSpec spec) {
+        if (spec.staticOptions() != null && !spec.staticOptions().isEmpty()) {
+            return spec.staticOptions();
+        }
+        return loadLookupOptions(resolveComboPath(spec), spec.comboIdField(), spec.comboLabelField());
     }
 
     private static void ColumnConstraints(GridPane grid) {
@@ -494,7 +510,7 @@ public abstract class AbstractPurchasingListController {
             String trade = api.asString(row.get("tradeName"));
             return trade.isBlank() ? legal : trade + " (" + legal + ")";
         }
-        if ("currencyLabel".equals(labelField)) {
+        if ("currencyLabel".equals(labelField) || "unitLabel".equals(labelField) || "lookupLabel".equals(labelField)) {
             String code = api.asString(row.get("code"));
             String name = api.asString(row.get("name"));
             return code + " - " + name;

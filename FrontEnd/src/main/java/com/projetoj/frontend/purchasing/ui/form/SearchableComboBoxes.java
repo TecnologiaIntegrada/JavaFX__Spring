@@ -90,7 +90,7 @@ public final class SearchableComboBoxes {
             return;
         }
         combo.getItems().stream()
-                .filter(option -> option.id().equals(id))
+                .filter(option -> option.id().equalsIgnoreCase(id))
                 .findFirst()
                 .ifPresent(option -> {
                     combo.setValue(option);

@@ -38,7 +38,7 @@ public class ProductListController extends AbstractPurchasingListController {
         return List.of(
                 FormFieldSpec.text("code", "Código"),
                 FormFieldSpec.text("description", "Descrição"),
-                FormFieldSpec.text("unitOfMeasure", "Unidade"),
+                FormFieldSpec.combo("unitOfMeasure", "Unidade", "/unidades-medida", "code", "unitLabel", "UN"),
                 FormFieldSpec.combo("supplierId", "Fornecedor principal", "/suppliers", "id", "supplierLabel")
         );
     }

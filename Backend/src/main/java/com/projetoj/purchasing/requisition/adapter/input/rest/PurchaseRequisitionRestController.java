@@ -249,12 +249,12 @@ public class PurchaseRequisitionRestController {
         List<PurchaseRequisitionItemJpaEntity> entities = new ArrayList<>();
         int lineNumber = 1;
         for (ItemRequest request : requests) {
-            if (!productRepository.existsById(request.productId())) {
-                throw new BusinessException("PRODUCT_NOT_FOUND", "Produto nao encontrado: " + request.productId(), HttpStatus.NOT_FOUND.value());
-            }
             if (request.quantity().signum() <= 0) {
                 throw new BusinessException("INVALID_ITEM_QUANTITY", "Quantidade deve ser maior que zero", HttpStatus.BAD_REQUEST.value());
             }
+
+            ProductJpaEntity product = productRepository.findById(request.productId())
+                    .orElseThrow(() -> new BusinessException("PRODUCT_NOT_FOUND", "Produto nao encontrado: " + request.productId(), HttpStatus.NOT_FOUND.value()));
 
             PurchaseRequisitionItemJpaEntity item = new PurchaseRequisitionItemJpaEntity();
             item.setId(UUID.randomUUID());
@@ -263,7 +263,7 @@ public class PurchaseRequisitionRestController {
             item.setProductId(request.productId());
             item.setDescriptionOverride(request.descriptionOverride());
             item.setQuantity(request.quantity());
-            item.setUom(request.uom().trim());
+            item.setUom(product.getUnitOfMeasure());
             item.setRequiredDate(request.requiredDate());
             item.setProjectId(request.projectId());
             item.setCostCenterId(request.costCenterId());

@@ -3,8 +3,12 @@ package com.projetoj.purchasing.supplier.adapter.input.rest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.projetoj.purchasing.supplier.adapter.output.persistence.SpringDataSupplierContactJpaRepository;
 import com.projetoj.purchasing.supplier.adapter.output.persistence.SpringDataSupplierJpaRepository;
+import com.projetoj.purchasing.supplier.adapter.output.persistence.SpringDataSupplierStatusJpaRepository;
+import com.projetoj.purchasing.supplier.adapter.output.persistence.SpringDataSupplierTypeJpaRepository;
 import com.projetoj.purchasing.supplier.adapter.output.persistence.SupplierContactJpaEntity;
 import com.projetoj.purchasing.supplier.adapter.output.persistence.SupplierJpaEntity;
+import com.projetoj.purchasing.supplier.adapter.output.persistence.SupplierStatusJpaEntity;
+import com.projetoj.purchasing.supplier.adapter.output.persistence.SupplierTypeJpaEntity;
 import com.projetoj.purchasing.shared.PurchasingAuditService;
 import com.projetoj.purchasing.shared.PurchasingAuditSupport;
 import com.projetoj.shared.exception.BusinessException;
@@ -41,15 +45,21 @@ public class SupplierRestController {
 
     private final SpringDataSupplierJpaRepository supplierRepository;
     private final SpringDataSupplierContactJpaRepository contactRepository;
+    private final SpringDataSupplierTypeJpaRepository typeRepository;
+    private final SpringDataSupplierStatusJpaRepository statusRepository;
     private final PurchasingAuditService auditService;
 
     public SupplierRestController(
             SpringDataSupplierJpaRepository supplierRepository,
             SpringDataSupplierContactJpaRepository contactRepository,
+            SpringDataSupplierTypeJpaRepository typeRepository,
+            SpringDataSupplierStatusJpaRepository statusRepository,
             PurchasingAuditService auditService
     ) {
         this.supplierRepository = supplierRepository;
         this.contactRepository = contactRepository;
+        this.typeRepository = typeRepository;
+        this.statusRepository = statusRepository;
         this.auditService = auditService;
     }
 
@@ -135,7 +145,7 @@ public class SupplierRestController {
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         SupplierJpaEntity entity = findSupplier(id);
         entity.setActive(false);
-        entity.setStatus("INACTIVE");
+        entity.setStatus("INATIVO");
         entity.setUpdatedAt(Instant.now());
         stampUpdate(entity, auditService.stampForUpdate(AuthenticatedUser.requireUserId()));
         supplierRepository.save(entity);
@@ -167,17 +177,26 @@ public class SupplierRestController {
             throw new BusinessException("MULTIPLE_PRIMARY_CONTACTS", "Apenas um contato principal e permitido", HttpStatus.BAD_REQUEST.value());
         }
 
+        java.util.HashSet<String> emails = new java.util.HashSet<>();
         List<SupplierContactJpaEntity> entities = requests.stream()
                 .map(request -> {
+                    String email = request.email() == null ? "" : request.email().trim();
+                    if (email.isBlank()) {
+                        throw new BusinessException("CONTACT_EMAIL_REQUIRED", "Informe o e-mail de contato", HttpStatus.BAD_REQUEST.value());
+                    }
+                    if (!emails.add(email.toLowerCase())) {
+                        throw new BusinessException("DUPLICATE_CONTACT_EMAIL", "E-mail de contato duplicado: " + email, HttpStatus.BAD_REQUEST.value());
+                    }
+                    String name = request.name() == null || request.name().isBlank() ? email : request.name().trim();
                     SupplierContactJpaEntity contact = new SupplierContactJpaEntity();
                     contact.setId(UUID.randomUUID());
                     contact.setSupplierId(supplierId);
-                    contact.setName(request.name().trim());
+                    contact.setName(name);
                     contact.setDepartment(request.department());
                     contact.setJobTitle(request.jobTitle());
                     contact.setPhone(request.phone());
                     contact.setMobile(request.mobile());
-                    contact.setEmail(request.email());
+                    contact.setEmail(email);
                     contact.setPrimary(Boolean.TRUE.equals(request.isPrimary()));
                     contact.setActive(request.active() == null || request.active());
                     contact.setCreatedAt(now);
@@ -214,15 +233,43 @@ public class SupplierRestController {
         );
     }
 
-    private static void apply(SupplierJpaEntity entity, SupplierRequest request, Instant now, PurchasingAuditService.AuditStamp stamp) {
+    private String resolveTypeCode(String supplierType) {
+        String code = supplierType == null ? "" : supplierType.trim();
+        SupplierTypeJpaEntity type = typeRepository.findByCodeIgnoreCase(code)
+                .orElseThrow(() -> new BusinessException(
+                        "SUPPLIER_TYPE_NOT_FOUND",
+                        "Tipo de fornecedor nao encontrado: " + code,
+                        HttpStatus.BAD_REQUEST.value()
+                ));
+        if (!type.isActive()) {
+            throw new BusinessException("SUPPLIER_TYPE_INACTIVE", "Tipo de fornecedor inativo: " + type.getCode(), HttpStatus.BAD_REQUEST.value());
+        }
+        return type.getCode();
+    }
+
+    private String resolveStatusCode(String status) {
+        String code = status == null || status.isBlank() ? "ATIVO" : status.trim();
+        SupplierStatusJpaEntity entity = statusRepository.findByCodeIgnoreCase(code)
+                .orElseThrow(() -> new BusinessException(
+                        "SUPPLIER_STATUS_NOT_FOUND",
+                        "Status de fornecedor nao encontrado: " + code,
+                        HttpStatus.BAD_REQUEST.value()
+                ));
+        if (!entity.isActive()) {
+            throw new BusinessException("SUPPLIER_STATUS_INACTIVE", "Status de fornecedor inativo: " + entity.getCode(), HttpStatus.BAD_REQUEST.value());
+        }
+        return entity.getCode();
+    }
+
+    private void apply(SupplierJpaEntity entity, SupplierRequest request, Instant now, PurchasingAuditService.AuditStamp stamp) {
         entity.setLegalName(request.legalName().trim());
         entity.setTradeName(request.tradeName());
         entity.setPersonType(request.personType().trim().toUpperCase());
         entity.setTaxId(request.taxId().trim());
         entity.setStateRegistration(request.stateRegistration());
         entity.setMunicipalRegistration(request.municipalRegistration());
-        entity.setSupplierType(request.supplierType().trim());
-        entity.setStatus(request.status() == null || request.status().isBlank() ? "ACTIVE" : request.status().trim());
+        entity.setSupplierType(resolveTypeCode(request.supplierType()));
+        entity.setStatus(resolveStatusCode(request.status()));
         entity.setDefaultCurrency(request.defaultCurrency() == null ? "BRL" : request.defaultCurrency().trim().toUpperCase());
         entity.setDefaultPaymentTerms(request.defaultPaymentTerms());
         entity.setAverageLeadTimeDays(request.averageLeadTimeDays());
@@ -326,12 +373,12 @@ public class SupplierRestController {
     }
 
     public record ContactRequest(
-            @NotBlank @Size(max = 150) String name,
+            @Size(max = 150) String name,
             @Size(max = 100) String department,
             @Size(max = 100) String jobTitle,
             @Size(max = 30) String phone,
             @Size(max = 30) String mobile,
-            @Size(max = 200) String email,
+            @NotBlank @Size(max = 200) String email,
             @JsonProperty("isPrimary") Boolean isPrimary,
             Boolean active
     ) {
